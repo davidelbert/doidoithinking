@@ -6,9 +6,30 @@ function MainComponent() {
     const [description, setDescription] = useState('');
     const [keywords, setKeywords] = useState('');
     const [relatedDoi, setRelatedDoi] = useState('');
-    const [creators, setCreators] = useState([{ name: '', affiliation: '', type: 'Person', orcid: '' }]);
+    
+    const [creators, setCreators] = useState([{ 
+    firstName: '', 
+    lastName: '', 
+    affiliation: '', 
+    type: 'Person', 
+    orcid: '' 
+    }]);
     const [jsonOutput, setJsonOutput] = useState(null);
     const [validationErrors, setValidationErrors] = useState([]);
+    
+    const downloadJson = () => {
+    if (!jsonOutput) return;
+    
+    const blob = new Blob([jsonOutput], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `doi-metadata-${new Date().toISOString()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+     };
   
     const startMinting = async () => {
       setLoading(true);
